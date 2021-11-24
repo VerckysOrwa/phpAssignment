@@ -1,61 +1,89 @@
-
-
-<?php
-function get_hour_string(){
-	$date = explode(",",date('d/m/Y/h/i')
-	list($day,$month,$year,$hour,$min) = $date);
-	echo $month.','.$day.','.$year.' '.$hour.':'.$min.':';
-}
-?> 
-
 <!DOCTYPE html>
 <html>
-<head>
-<title>Calendar</title> 
 
-<link rel="stylesheet" type="text/css" href="./calender.css" />
+    <link rel="stylesheet" type="text/css" href="calendar.css" />
 
-</head>
-<body>
+    <head>
+        <title>Calender</title> 
+    </head>
 
-<div class="container">
-<h1>Bruin Family Schedule for<?php get_hour_string()?> </h1>
-<table id="event_table">
+    <body>
 
+        <?php
+            date_default_timezone_set('Kenya/Nairobi'); 
 
-	<tr> 
-		<th class='hr_td'> &nbsp; </th> <th class='table_header'>Joe</th><th class='table_header'>Joanna</th><th class='table_header'>Lil Cub</th> 
-	</tr> 
-<tr class='even_row'> 
-<td class='hr_td'>10.00pm</td> <td> </td> <td> </td> <td></td>
-</tr><tr class='odd_row'>
-<td class='hr_td'>11.00pm</td> <td> </td> <td> </td> <td> </td>
-</tr><tr class='even_row'> 
-<td class='hr_td'>12.00am</td> <td> </td> <td> </td> <td></td>
-</tr><tr class='odd_row'>
-<td class='hr_td'>1.00am</td> <td> </td> <td> </td> <td> </td>
-</tr><tr class='even_row'> 
-<td class='hr_td'>2.00am</td> <td> </td> <td> </td> <td></td>
-</tr><tr class='odd_row'>
-<td class='hr_td'>3.00am</td> <td> </td> <td> </td> <td> </td>
-</tr><tr class='even_row'> 
-<td class='hr_td'>4.00am</td> <td> </td> <td> </td> <td></td>
-</tr><tr class='odd_row'>
-<td class='hr_td'>5.00am</td> <td> </td> <td> </td> <td> </td>
-</tr><tr class='even_row'> 
-<td class='hr_td'>6.00am</td> <td> </td> <td> </td> <td></td>
-</tr><tr class='odd_row'>
-<td class='hr_td'>7.00am</td> <td> </td> <td> </td> <td> </td>
-</tr><tr class='even_row'> 
-<td class='hr_td'>8.00am</td> <td> </td> <td> </td> <td></td>
-</tr><tr class='odd_row'>
-<td class='hr_td'>9.00am</td> <td> </td> <td> </td> <td> </td>
-</tr><tr class='even_row'> 
-<td class='hr_td'>10.00am</td> <td> </td> <td> </td> <td></td>
-</tr>	
-	
-</table>
+            $hours_to_show = 11;  
+			if(isset($_POST['submit'])){
+				$hours_to_show = $_POST["hours_to_show"] - 1;
+			}
+            $timeStamp = time();
+            $todayDate = date("D, F j, Y", $timeStamp);                                                    
+            $currentTime = date("g:i a",$timeStamp);     
+            $todayDay = date("l", $timeStamp);
 
-</div>
-</body>
+            function get_hour_string($timeStamp){ 
+                $hour = date("g", $timeStamp);
+                $am_or_pm = date("a", $timeStamp);
+                return "$hour:00 $am_or_pm";
+            }
+
+        ?>
+        
+        <div class="container">
+            <h1> 
+                <?php 
+                    echo "<br><b>Welcome!</b><br>";
+                    echo "<br><b>The day of the week</b>: $todayDay";
+                    echo "<br><b>Today's date</b>: $todayDate";
+                    echo "<br><b>The current time is</b> $currentTime <br>"; 
+                ?> 
+				<form method="POST">
+					Hours to show: <input type="number" name="hours_to_show">
+					<input type="submit" value="submit" name = "submit">
+				</form>
+            </h1>
+            <table id="event_table">
+            <tr>    
+                <th class='hr_td'></th>
+                <th class='table_header'>&nbsp&nbsp&nbsp&nbsp&nbspForrest</th> 
+                <th class='table_header'>&nbsp&nbsp&nbsp&nbsp&nbspLouis</th>
+                <th class='table_header'>&nbsp&nbspHenry</th>
+            </tr> 
+            <tr> <br> </tr>
+
+        <?php
+
+        for ($i = 0; $i <= $hours_to_show; $i++) { 
+            $hours = get_hour_string($timeStamp + $i * 60 * 60); 
+            if ($i % 2 == 0) { 
+
+                echo  "<tr class='even_row'> \n ";
+                echo "<td class='hr_td'>
+                            <b>$hours</b>
+                      </td>
+                      <td> </td>                        
+                      <td> </td> 
+                      <td> </td> \n";
+                echo "</tr> \n";
+
+            }
+
+            if ($i % 2 != 0) { 
+
+                echo "<tr class='odd_row'> \n";
+                echo "<td class='hr_td'>
+                            <b>$hours</b>
+                      </td>  
+                      <td> </td> 
+                      <td> </td> 
+                      <td> </td> \n";
+
+                echo "</tr> \n";
+            }
+        }
+        ?>	
+            </table>
+        </div>
+
+    </body>
 </html>
